@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>EAMIS-HELPER| SEARCH</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!-- Bootstrap 3.3.7 -->
+    <link rel="stylesheet" href="../../style/bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="../../style/bower_components/font-awesome/css/font-awesome.min.css">
+
+    <!-- DataTables -->
+    <link rel="stylesheet" href="../../style/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
+    <!-- Theme style -->
+    <!-- AdminLTE Skins. Choose a skin from the css/skins
+         folder instead of downloading all of them to reduce the load. -->
+    <link rel="stylesheet" href="../../style/dist/css/skins/_all-skins.min.css">
+
+    <link rel="stylesheet" href="../../style/bower_components/select2/dist/css/select2.min.css">
+    <link rel="stylesheet" type="text/css" href="../../style/newstyle/css/table_new.css"/>
+
+    <link rel="stylesheet" href="../../style/dist/css/AdminLTE.min.css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Google Font -->
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+</head>
+
+<body class="hold-transition skin-blue-light fixed sidebar-mini" >
+<div class="wrapper" id="sfind">
+
+
+    <header class="main-header" id="headerStudentInfo" >
+
+        <!-- Logo -->
+        <a href="#" class="logo navbar-fixed-top">
+            <!-- mini logo for sidebar mini 50x50 pixels -->
+            <span class="logo-mini"><b>E</b>-h</span>
+            <!-- logo for regular state and mobile devices -->
+            <span class="logo-lg"><b>EAMIS-</b>Helper</span>
+        </a>
+
+        <!-- Header Navbar -->
+        <nav class="navbar navbar-fixed-top" role="navigation">
+            <!-- Sidebar toggle button-->
+            <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+                <span class="sr-only">Toggle navigation</span>
+            </a>
+            <!-- Navbar Right Menu -->
+            <div class="navbar-custom-menu">
+                <ul class="nav navbar-nav">
+
+                    <!-- Notifications Menu -->
+
+                    <!-- Tasks Menu -->
+                    <li class="dropdown tasks-menu">
+                        <!-- Menu Toggle Button -->
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <i class="fa fa-flag-o"></i>
+                            <span class="label label-danger" id="pagesNotCommentCourses">{{ sub }}</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="header" id="pagesAlert">有{{ sub }}门课未评价</li>
+                            <li>
+                                <!-- Inner menu: contains the tasks -->
+                                <ul class="menu">
+                                    <li>
+                                        <!-- Task item -->
+                                        <a :href="'http://localhost:8080/view/user/course-attended.html?id='+studentIdStr">
+                                            <!-- Task title and progress text -->
+                                            <h3>
+                                                已评课数
+                                                <small class="pull-right" id="pagesCourses" >{{ studentPageInfo.commentNumber }}/{{ studentPageInfo.selectNumber }}</small>
+                                            </h3>
+                                            <!-- The progress bar -->
+                                            <div class="progress xs">
+                                                <!-- Change the css width attribute to simulate progress -->
+                                                <div class="progress-bar progress-bar-aqua" style="width: 20%" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
+                                                    <!--<span class="sr-only">20% Complete</span>-->
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <!-- end task item -->
+                                </ul>
+                            </li>
+                            <li class="footer">
+                                <a :href="'http://localhost:8080/view/user/classdetail-uploads.html?id='+studentIdStr">进入评课</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <!-- User Account Menu -->
+                    <li class="dropdown user user-menu">
+                        <!-- Menu Toggle Button -->
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <!-- The user image in the navbar-->
+                            <img :src="studentPageInfo.portrait" class="user-image" alt="User Image">
+                            <!-- hidden-xs hides the username on small devices so only the image appears. -->
+                            <span class="hidden-xs" id="pagesStudentName">{{ studentPageInfo.nickName }}</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <!-- The user image in the menu -->
+                            <li class="user-header">
+                                <img :src="studentPageInfo.portrait" class="img-circle" alt="User Image">
+
+                                <p id="pagesStudentMajor">
+                                    {{ studentPageInfo.nickName }} - {{ studentPageInfo.major }}
+                                    <small id="pagesStudentNumber">学号：{{ studentPageInfo.studentNumber }}</small>
+                                </p>
+                            </li>
+                            <!-- Menu Body -->
+
+                            <!-- Menu Footer-->
+                            <li class="user-footer">
+                                <div class="pull-left">
+                                    <a :href="'studentinfo_new.html?id='+studentIdStr" class="btn btn-default btn-flat">Profile</a>
+                                </div>
+                                <div class="pull-right">
+                                    <a v-on:click="out()" class="btn btn-default btn-flat">Sign out</a>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Left side column. contains the logo and sidebar -->
+    <aside class="main-sidebar " style="position: fixed " id="asideStudentInfo">
+
+        <!-- sidebar: style can be found in sidebar.less -->
+        <section class="sidebar">
+
+            <!-- Sidebar user panel (optional) -->
+            <div class="user-panel" style="height: 65px;">
+                <div class="pull-left image">
+                    <img :src="studentPageInfo.portrait" class="img-circle" alt="User Image">
+                </div>
+                <div class="pull-left info">
+                    <p>{{ studentPageInfo.nickName }}</p>
+
+                    <!-- Status -->
+                    <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+                </div>
+            </div>
+
+            <!-- search form (Optional) -->
+            <!--<form action="#" method="get" class="sidebar-form">
+<div class="input-group">
+<input type="text" name="q" class="form-control" placeholder="Search...">
+<span class="input-group-btn">
+  <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
+  </button>
+</span>
+</div>
+</form>-->
+            <!-- /.search form -->
+
+            <!-- Sidebar Menu -->
+            <ul class="sidebar-menu" data-widget="tree">
+                <li class="header">EAMIS_HELPER</li>
+                <!-- Optionally you can add icons to the links -->
+                <li >
+                    <a :href="'new_start.html?id='+studentIdStr"><i class="fa fa-user"></i> <span>用户首页</span></a>
+                </li>
+                <li class="active">
+                    <a v-if="studentPageInfo.privilege == 0" :href="'http://localhost:8080/view/user/courseList.html?id='+studentIdStr"><i class="fa fa-book"></i> <span>查看所有课程</span></a>
+                    <a v-else :href="'../admin/course-administrator.html?id='+studentIdStr"><i class="fa fa-book"></i> <span>查看所有课程</span></a>
+                </li>
+                <li>
+                    <a :href="'course-attended.html?id='+studentIdStr"><i class="fa fa-bookmark"></i> <span>查看已修课程</span></a>
+                </li>
+                <li>
+                    <a :href="'select_course.html?id='+studentIdStr"><i class="fa fa-edit"></i> <span>推荐课程</span></a>
+                </li>
+                <li v-if="studentPageInfo.privilege == 1">
+                    <a :href="'../admin/manageStudent.html?id='+studentIdStr"><i class="fa fa-heart"></i> <span>查看所有用户信息</span></a>
+                </li>
+                <li>
+                    <a :href="'studentinfo_new.html?id='+studentIdStr"><i class="fa fa-edit"></i> <span>个人信息</span></a>
+                </li>
+                <!--<li class="treeview">
+<a href="#"><i class="fa fa-link"></i> <span>Multilevel</span>
+<span class="pull-right-container">
+    <i class="fa fa-angle-left pull-right"></i>
+  </span>
+</a>
+<ul class="treeview-menu">
+<li><a href="#">Link in level 2</a></li>
+<li><a href="#">Link in level 2</a></li>
+</ul>
+</li>-->
+            </ul>
+
+        </section>
+        <!-- /.sidebar -->
+    </aside>
+				<!--&lt;!&ndash; Main Header &ndash;&gt;-->
+				<!--<header class="main-header">-->
+
+					<!--&lt;!&ndash; Logo &ndash;&gt;-->
+					<!--<a href="#" class="logo navbar-fixed-top">-->
+						<!--&lt;!&ndash; mini logo for sidebar mini 50x50 pixels &ndash;&gt;-->
+						<!--<span class="logo-mini"><b>E</b>-h</span>-->
+						<!--&lt;!&ndash; logo for regular state and mobile devices &ndash;&gt;-->
+						<!--<span class="logo-lg"><b>EAMIS-</b>Helper</span>-->
+					<!--</a>-->
+
+					<!--&lt;!&ndash; Header Navbar &ndash;&gt;-->
+					<!--<nav class="navbar navbar-fixed-top" role="navigation">-->
+						<!--&lt;!&ndash; Sidebar toggle button&ndash;&gt;-->
+						<!--<a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">-->
+							<!--<span class="sr-only">Toggle navigation</span>-->
+						<!--</a>-->
+						<!--&lt;!&ndash; Navbar Right Menu &ndash;&gt;-->
+						<!--<div class="navbar-custom-menu">-->
+							<!--<ul class="nav navbar-nav">-->
+
+								<!--&lt;!&ndash; Notifications Menu &ndash;&gt;-->
+
+								<!--&lt;!&ndash; Tasks Menu &ndash;&gt;-->
+								<!--<li class="dropdown tasks-menu">-->
+									<!--&lt;!&ndash; Menu Toggle Button &ndash;&gt;-->
+									<!--<a href="#" class="dropdown-toggle" data-toggle="dropdown">-->
+										<!--<i class="fa fa-flag-o"></i>-->
+										<!--<span class="label label-danger">21</span>-->
+									<!--</a>-->
+									<!--<ul class="dropdown-menu">-->
+										<!--<li class="header">有21门课未评价</li>-->
+										<!--<li>-->
+											<!--&lt;!&ndash; Inner menu: contains the tasks &ndash;&gt;-->
+											<!--<ul class="menu">-->
+												<!--<li>-->
+													<!--&lt;!&ndash; Task item &ndash;&gt;-->
+													<!--<a href="http://localhost:8080/view/user/course-attended.html?id={{studentId}}">-->
+														<!--&lt;!&ndash; Task title and progress text &ndash;&gt;-->
+														<!--<h3>-->
+                                                     <!--已评课数-->
+                        <!--<small class="pull-right">9/30</small>-->
+                      <!--</h3>-->
+														<!--&lt;!&ndash; The progress bar &ndash;&gt;-->
+														<!--<div class="progress xs">-->
+															<!--&lt;!&ndash; Change the css width attribute to simulate progress &ndash;&gt;-->
+															<!--<div class="progress-bar progress-bar-aqua" style="width: 20%" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">-->
+																<!--&lt;!&ndash;<span class="sr-only">20% Complete</span>&ndash;&gt;-->
+															<!--</div>-->
+														<!--</div>-->
+													<!--</a>-->
+												<!--</li>-->
+												<!--&lt;!&ndash; end task item &ndash;&gt;-->
+											<!--</ul>-->
+										<!--</li>-->
+										<!--<li class="footer">-->
+											<!--<a href="http://localhost:8080/view/user/classdetail-uploads.html?id={{studentId}}">进入评课</a>-->
+										<!--</li>-->
+									<!--</ul>-->
+								<!--</li>-->
+								<!--&lt;!&ndash; User Account Menu &ndash;&gt;-->
+								<!--<li class="dropdown user user-menu">-->
+									<!--&lt;!&ndash; Menu Toggle Button &ndash;&gt;-->
+									<!--<a href="#" class="dropdown-toggle" data-toggle="dropdown">-->
+										<!--&lt;!&ndash; The user image in the navbar&ndash;&gt;-->
+										<!--<img src="../../style/dist/img/user2-160x160.jpg" class="user-image" alt="User Image">-->
+										<!--&lt;!&ndash; hidden-xs hides the username on small devices so only the image appears. &ndash;&gt;-->
+										<!--<span class="hidden-xs">Alexander Pierce</span>-->
+									<!--</a>-->
+									<!--<ul class="dropdown-menu">-->
+										<!--&lt;!&ndash; The user image in the menu &ndash;&gt;-->
+										<!--<li class="user-header">-->
+											<!--<img src="../../style/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">-->
+
+											<!--<p>-->
+												<!--胖成球 - 信息安全-->
+												<!--<small>学号：1611522</small>-->
+											<!--</p>-->
+										<!--</li>-->
+										<!--&lt;!&ndash; Menu Body &ndash;&gt;-->
+
+										<!--&lt;!&ndash; Menu Footer&ndash;&gt;-->
+										<!--<li class="user-footer">-->
+											<!--<div class="pull-left">-->
+												<!--<a href="studentinfo_new.html?id={{studentId}}" class="btn btn-default btn-flat">Profile</a>-->
+											<!--</div>-->
+											<!--<div class="pull-right">-->
+												<!--<a href="#" class="btn btn-default btn-flat">Sign out</a>-->
+											<!--</div>-->
+										<!--</li>-->
+									<!--</ul>-->
+								<!--</li>-->
+
+							<!--</ul>-->
+						<!--</div>-->
+					<!--</nav>-->
+				<!--</header>-->
+				<!--&lt;!&ndash; Left side column. contains the logo and sidebar &ndash;&gt;-->
+				<!--<aside class="main-sidebar " style="position: fixed ">-->
+
+					<!--&lt;!&ndash; sidebar: style can be found in sidebar.less &ndash;&gt;-->
+					<!--<section class="sidebar">-->
+
+						<!--&lt;!&ndash; Sidebar user panel (optional) &ndash;&gt;-->
+						<!--<div class="user-panel" style="height: 65px;">-->
+							<!--<div class="pull-left image">-->
+								<!--<img src="../../style/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">-->
+							<!--</div>-->
+							<!--<div class="pull-left info">-->
+								<!--<p>Alexander Pierce</p>-->
+								<!--&lt;!&ndash; Status &ndash;&gt;-->
+								<!--<a href="#"><i class="fa fa-circle text-success"></i> Online</a>-->
+							<!--</div>-->
+						<!--</div>-->
+
+            <!--<ul class="sidebar-menu" data-widget="tree">-->
+                <!--<li class="header">EAMIS_HELPER</li>-->
+                <!--&lt;!&ndash; Optionally you can add icons to the links &ndash;&gt;-->
+                <!--<li >-->
+                    <!--<a href="new_start.html?id={{studentId}}"><i class="fa fa-user"></i> <span>用户首页</span></a>-->
+                <!--</li>-->
+                <!--<li class="active">-->
+                    <!--<a href="#"><i class="fa fa-book"></i> <span>查看所有课程</span></a>-->
+                <!--</li>-->
+                <!--<li>-->
+                    <!--<a href="course-attended.html?id={{studentId}}"><i class="fa fa-bookmark"></i> <span>查看已修课程</span></a>-->
+                <!--</li>-->
+                <!--<li>-->
+                    <!--<a href="select_course.html?id={{studentId}}"><i class="fa fa-heart"></i> <span>推荐课程页面</span></a>-->
+                <!--</li>-->
+                <!--<li>-->
+                    <!--<a href="studentinfo_new.html?id={{studentId}}"><i class="fa fa-edit"></i> <span>个人信息</span></a>-->
+                <!--</li>-->
+
+            <!--</ul>-->
+            <!--&lt;!&ndash; /.sidebar-menu &ndash;&gt;-->
+        <!--</section>-->
+        <!--&lt;!&ndash; /.sidebar &ndash;&gt;-->
+    <!--</aside>-->
+
+    <!-- Content Wrapper. Contains page content -->
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <!--标题-->
+            <h1>
+                课程查询
+                <small>Search</small>
+            </h1>
+            <!--面包屑-->
+            <ol class="breadcrumb">
+                <li><a href="#"><i class="fa fa-book"></i> 查看所有课程</a></li>
+                <!--<li class="active">查看所有课程</li>-->
+            </ol>
+        </section>
+
+        <div class=" newsletter" style="margin-top: 60px;">
+            <div class="social">
+                <ul>
+                    <li><a  href="#" class="link dblue" ><span onclick="findCourseByType('A')">A</span></a></li>
+                    <li><a  href="#" class="link lblue" ><span onclick="findCourseByType('B')">B</span></a></li>
+                    <li><a  href="#" class="link orange"><span onclick="findCourseByType('C')">C</span></a></li>
+                    <li><a  href="#" class="link yellow"><span onclick="findCourseByType('D')">D</span></a></li>
+                    <li><a  href="#" class="link dgreen"><span onclick="findCourseByType('E')">E</span></a></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Main content -->
+        <section class="content">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="box box-warning">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">筛选条件</h3>
+                            <div class="box-tools pull-right">
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                            </div>
+                        </div>
+
+                        <div class="box-body">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>课程编码</label>
+                                        <div class="input-group" style="width: 100%;">
+
+                                            <input type="text" id="courseCode" name="message" placeholder="输入课程编码" class="form-control">
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>授课老师</label>
+                                        <select name="teacherName" onchange="findCourseByTeacherName(this)" id="teacherName" class="form-control select2" style="width: 100%;">
+
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>课程名称</label>
+                                        <select name="courseName" onchange="findTeacherByCourseName(this)" id="courseName" class="form-control select2" style="width: 100%;">
+
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>考核方式</label>
+                                        <select name="examType" id="examType" class="form-control select2" style="width: 100%;">
+                                            <option selected="selected" >全部</option>
+                                            <option>开卷</option>
+                                            <option>闭卷</option>
+                                            <option>论文结课</option>
+                                            <option>其他</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6" style="text-align: right;font-size: 20px;">
+                                    <div  class="form-group">
+                                        <label>是否通过制</label>
+                                        <input type="checkbox" class=" flat-red " id="passType">
+                                    </div>
+                                </div>
+                                <div class="col-md-6" style="text-align: left;font-size: 18px;">
+                                    <div class="form-group">
+                                        <button id="searchCourse" class="btn btn-primary" name="search" >
+                                            <i class="fa fa-fw fa-search"></i>
+                                            搜索
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="box box-primary">
+                        <div class="box-header">
+                            <h3 class="box-title">课程列表</h3>
+                        </div>
+                        <div class="box-body">
+                            <table id="example2" class="table table-bordered table-striped">
+                                <thead>
+                                <tr>
+                                    <th scope="col">编号</th>
+                                    <th scope="col">课程</th>
+                                    <th scope="col">老师</th>
+                                    <th scope="col">考核方式</th>
+                                    <th scope="col">通过制</th>
+                                </tr>
+                                </thead>
+                                <tbody id="courseList">
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- /.box-body -->
+                    </div>
+                    <!-- /.box -->
+
+                    <!-- /.box -->
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        </section>
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+    <footer class="main-footer">
+        <strong>Copyright &copy; 2018 EAMIS-HELPER</a>.</strong> All rights
+        reserved.
+    </footer>
+</div>
+<!-- ./wrapper -->
+
+<!-- jQuery 3 -->
+<script src="../../style/bower_components/jquery/dist/jquery.min.js"></script>
+<!-- Bootstrap 3.3.7 -->
+<script src="../../style/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<!-- DataTables -->
+<!-- AdminLTE App -->
+<script src="../../style/dist/js/adminlte.min.js"></script>
+<script src="../../style/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="../../style/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="../../style/dist/js/demo.js"></script>
+<!-- page script -->
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="../../plugins/vue.js"></script>
+<script src="../../style/bower_components/select2/dist/js/select2.full.min.js"></script>
+
+<script>
+
+    var studentIdStr='';
+
+    var headerStudentInfo = new Vue({
+        el:'#headerStudentInfo',
+        data:{
+            studentPageInfo:{
+
+            },
+            sub:'',
+            studentIdStr:'',
+        },
+        methods:{
+            GetQueryString(name) {
+                var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+                var r = window.location.search.substr(1).match(reg); //获取url中"?"符后的字符串并正则匹配
+                var context = "";
+                if (r != null)
+                    context = r[2];
+                reg = null;
+                r = null;
+                return context == null || context == "" || context == "undefined" ? "" : context;
+            },
+            getPar() {
+                studentIdStr = this.GetQueryString('id');
+            },
+            getPageStudentInfo(){
+                $.ajax({
+                    url:'http://localhost:8080/studentPagesInfo',
+                    data:{
+                        studentIdStr:studentIdStr,
+                    },
+                    type:'GET',
+                    dataType:'json',
+                    success:function (res) {
+                        headerStudentInfo.studentPageInfo = res.data.student;
+                        headerStudentInfo.sub = res.data.student.selectNumber - res.data.student.commentNumber;
+                        headerStudentInfo.studentIdStr = studentIdStr;
+                    }
+                })
+
+            },
+            out(){
+                $.ajax({
+                    url:'http://localhost:8080/out',
+                    data:{},
+                    type:'GET',
+                    dataType:'json',
+                    success(res){
+                        alert(res.data);
+                        location.href = "../login.html";
+                    }
+                })
+            }
+            ,
+        },
+        mounted(){
+            this.getPar();
+            this.getPageStudentInfo();
+        }
+    })
+
+    var asideStudentInfo = new Vue({
+        el:'#asideStudentInfo',
+        data:{
+            studentPageInfo:{
+
+            },
+            sub:'',
+            studentIdStr:'',
+        },
+        methods:{
+            getPageStudentInfo(){
+                $.ajax({
+                    url:'http://localhost:8080/studentPagesInfo',
+                    data:{
+                        studentIdStr:studentIdStr,
+                    },
+                    type:'GET',
+                    dataType:'json',
+                    success:function (res) {
+                        asideStudentInfo.studentPageInfo = res.data.student;
+                        asideStudentInfo.sub = res.data.student.selectNumber - res.data.student.commentNumber;
+                        asideStudentInfo.studentIdStr = studentIdStr;
+                    }
+                })
+
+            }
+        },
+        mounted(){
+            this.getPageStudentInfo();
+        }
+    })
+
+    $(function () {
+        $('#example1').DataTable()
+        $('#example2').DataTable({
+            'paging'      : true,
+            'lengthChange': false,
+            'searching'   : false,
+            'ordering'    : true,
+            'info'        : true,
+            'autoWidth'   : false
+        });
+        //Initialize Select2 Elements
+
+        $.ajax({
+            url:'http://localhost:8080/findAllCourse',
+            type:'GET',
+            beforeSend: function () {
+                $('#courseList').html('')
+            },
+            data:{},
+            success:function (res) {
+                if (res.success) {
+                    for (var course of res.data.courses) {
+
+                        $('#courseList').append(`<tr>
+                                    <td>${course.courseCode}</td>
+                                    <td>${course.courseName}</td>
+                                    <td>${course.teacherName }</td>
+                                    <td>${course.examForm}</td>
+                                    <td>${course.passingForm}</td>
+                                    <td>
+                                        <a href="classdetail-uploads.html?id=${studentIdStr}&&courseId=${course.courseId}">评价</a>
+                                    </td>
+                                </tr>`)
+                    }
+                }
+            }
+        })
+
+        $.ajax({
+            url: 'http://localhost:8080/findAllTeacherAndCourse',
+            data: {
+                studentIdStr: studentId,
+            },
+            type: 'GET',
+            success: function (res) {
+                if (res.success) {
+
+                    for (var teacher of res.data.teachers) {
+
+                        $('#teacherName').append(`<option> ${ teacher.teacherName } </option>`)
+                    }
+
+                    for(var course of res.data.courses){
+                        $('#courseName').append(`<option>${ course.courseName }</option>`)
+                    }
+                }
+            },
+        })
+
+
+    })
+    var studentId='';
+    // var Courseinfo = new Vue({
+	// 		el: '#sfind',
+	// 		data: {
+    //             Login:{},
+	// 		},
+	// 		methods: {
+	// 			GetQueryString(name) {
+	// 				var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+	// 				var r = window.location.search.substr(1).match(reg); //获取url中"?"符后的字符串并正则匹配
+	// 				var context = "";
+	// 				if(r != null)
+	// 					context = r[2];
+	// 				reg = null;
+	// 				r = null;
+	// 				return context == null || context == "" || context == "undefined" ? "" : context;
+	// 			},
+	// 			getPar() {
+	// 				studentId = this.GetQueryString('id');
+	// 			},
+    //             GetLogin(){
+    //                 $.ajax({
+    //                     url:'http://localhost:8080/getsession',
+    //                     type: 'Get',
+    //                     data : {},
+    //                     dataType:'json',
+    //                     success(json){
+    //                         if(json.success){
+    //                             // this.Login=json.data;
+    //                             // alert(this.Login.nickName);
+    //                         }else{
+    //                             alert(json.data);
+    //                             location.href="../login.html";
+    //                         }
+    //                     },
+    //                     error: function (XMLHttpRequest){
+    //                         alert(("输出错误信息")+XMLHttpRequest.responseText);
+    //                     }
+    //                 })
+    //
+    //             }
+	// 		},
+    //
+	// 		mounted() {
+	// 			this.getPar();
+	// 			this.GetLogin();
+	// 		}
+	// 	})
+		
+		
+    if(document.body.scrollWidth < 300){
+      document.getElementById('autoDis').style.display = 'none';
+    }
+
+    function findCourseByType(obj) {
+        $.ajax({
+            url:'http://localhost:8080/findByType',
+            data:{
+                courseType:obj
+            },
+            type:'GET',
+            beforeSend: function () {
+                $('#courseList').html('')
+            },
+            success:function (res) {
+                if(res.success){
+                    for(var course of res.data.courses ){
+                        $('#courseList').append(`<tr>
+                                    <td>${ course.courseCode }</td>
+                                    <td>${ course.courseName }</td>
+                                    <td>${ course.teacherName }</td>
+                                    <td>${ course.examForm }</td>
+                                    <td>${ course.passingForm }</td>
+                                    <td>
+                                        <a href="classdetail-uploads.html?id=${studentIdStr}&&courseId=${course.courseId}">评价</a>
+                                    </td>
+
+                                <tr>`)
+                    }
+                }else {
+                    alert("没有查找到相关课程，请重试！")
+                }
+            }
+        })
+    }
+
+    function findCourseByTeacherName(obj) {
+        $.ajax({
+            url: 'http://localhost:8080/findByTeacherName',
+            data: {
+                teacherName: obj.value,
+            },
+            type: 'GET',
+            beforeSend: function () {
+                $('#courseName').html('')
+            },
+            success: function (res) {
+                if (res.success) {
+
+                    for (var course of res.data.courses)
+                        $('#courseName').append(`<option>${ course.courseName }</option>`)
+                }
+            }
+        })
+    }
+
+    function findTeacherByCourseName(obj) {
+        $.ajax({
+            url:'http://localhost:8080/findByCourseName',
+            data:{
+                courseName:obj.value,
+            },
+            type:'GET',
+            beforeSend:function () {
+                $('#teacherName').html('')
+            },
+            success:function (res) {
+                if(res.success){
+                    for( var teacher of res.data.teachers){
+                        $('#teacherName').append(`<option>${ teacher.teacherName }</option>`)
+                    }
+                }
+            }
+        })
+    }
+
+    $('#searchCourse').click(function () {
+        $.ajax({
+            url:'http://localhost:8080/findByCourseCode',
+            data:{
+                courseCode:document.getElementById("courseCode").value,
+                teacherName: document.getElementById("teacherName").value,
+                courseName: document.getElementById("courseName").value,
+                passType:document.getElementById("passType").checked,
+                examType: document.getElementById("examType").value
+            },
+            type:'GET',
+            beforeSend:function () {
+                $('#courseList').html('')
+            },
+            success:function (res) {
+                if(res.success){
+                        for(var course of res.data.courses ){
+
+                            $('#courseList').append(`<tr>
+                                    <td>${ course.courseCode }</td>
+                                    <td>${ course.courseName }</td>
+                                    <td>${ course.teacherName }</td>
+                                    <td>${ course.examForm }</td>
+                                    <td>${ course.passingForm }</td>
+                                    <td>
+                                        <a href="classdetail-uploads.html?id=${studentIdStr}&&courseId=${course.courseId}">评价</a>
+                                    </td>
+
+                                <tr>`)
+                        }
+
+                }else {
+                    alert("没有查找到相关课程，请重试！")
+                }
+            }
+        })
+    })
+    
+</script>
+
+
+</body>
+</html>
